@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct {
+typedef struct MyStack{
     int size;
     int front;
     int rear;
@@ -39,15 +39,23 @@ bool myStackFull(MyStack* obj) {
     }
     return false;
 }
+int peek(MyStack* obj){
+    if (myStackEmpty(obj))
+    return -1;
+
+    return obj->arr[obj->front];
+}
+void enqueue(MyStack* obj, int x){
+    if(myStackFull(obj)){
+    return;}
+    else{
+    obj->rear = (obj->rear+1)%obj->size;
+    obj->arr[obj->rear] = x;
+    }
+}
 
 void myStackPush(MyStack* obj, int x) {
-    if(myStackFull(obj)){
-        return;
-    }
-    else{
-        obj->rear = (obj->rear+1)%obj->size;
-        obj->arr[obj->rear] = x;
-    }
+    enqueue(obj,x);
 }
 
 void myStackFree(MyStack* obj) {
@@ -60,79 +68,94 @@ int dequeue(MyStack* obj){
     obj->front = (obj->front+1)%obj->size;
     return obj->arr[obj->front];
 }
-
 int myStackTop(MyStack* obj) {
     if (myStackEmpty(obj))
     return -1;
     
-    while(!myStackEmpty(obj)){
-        if(obj->front>0){
-        myStackPush(obj->Queue2,dequeue(obj));
+    int val;
+    
+    while (!myStackEmpty(obj)) {
+        val = dequeue(obj);
+        
+        if(!myStackEmpty(obj)){
+            myStackPush(obj->Queue2,val);
+        }
+        else {
+            break;
         }
     }
-
-    int val = dequeue(obj);
-
+    
     while(!myStackEmpty(obj->Queue2)){
-
-        if(obj->Queue2->front>0)
+        
+        if(peek(obj->Queue2))
         myStackPush(obj,dequeue(obj->Queue2));
     }
     myStackPush(obj,val);
-
+    
     return val;
 }
 int myStackPop(MyStack* obj) {
     if (myStackEmpty(obj))
     return -1;
     
-    while(!myStackEmpty(obj)){
-
-        if(obj->front>0){
-        myStackPush(obj->Queue2,dequeue(obj));
-        }
-
-    }
-
-    int val = dequeue(obj);
-
-    while(!myStackEmpty(obj->Queue2)){
-
-        if(obj->Queue2->front>0)
-        myStackPush(obj,dequeue(obj->Queue2));
+    int val;
+    while (!myStackEmpty(obj)) {
+        val = dequeue(obj);
         
+        if(!myStackEmpty(obj)){
+            myStackPush(obj->Queue2,val);
+        }
+        
+        else {
+            break;
+        }
+    }
+    while(!myStackEmpty(obj->Queue2)){
+        if(peek(obj->Queue2)!=val){
+            myStackPush(obj,dequeue(obj->Queue2));}
+        }
+        
+        return val;
+    }
+    /**
+     * Your MyStack struct will be instantiated and called as such:
+     * MyStack* obj = myStackCreate();
+     * myStackPush(obj, x);
+     
+     * int param_2 = myStackPop(obj);
+     
+     * int param_3 = myStackTop(obj);
+     
+     * bool param_4 = myStackEmpty(obj);
+     
+     * myStackFree(obj);
+     */
+    void traversal(MyStack* obj){
+        int i = obj->front+1;
+        while(i<=obj->rear){
+            printf("%d\t", obj->arr[i]);
+            i++;
+        }
+        printf("\n");
     }
 
-    return val;
-}
-/**
- * Your MyStack struct will be instantiated and called as such:
- * MyStack* obj = myStackCreate();
- * myStackPush(obj, x);
- 
- * int param_2 = myStackPop(obj);
- 
- * int param_3 = myStackTop(obj);
- 
- * bool param_4 = myStackEmpty(obj);
- 
- * myStackFree(obj);
- */
-int main(){
+    int main(){
     MyStack* stack = myStackCreate();
     myStackPush(stack,13);
     myStackPush(stack,58);
     myStackPush(stack,71);
     myStackPush(stack,43);
-    // traversal(stack);
+    traversal(stack);
+
     int removed = myStackPop(stack);
     printf("%d removed from stack\n", removed);
+    
     myStackPush(stack,46);
     myStackPush(stack,75);
-    // traversal(stack);
-
+    traversal(stack);
+    
     int top_element = myStackTop(stack);
-
-    printf("\n%d is the top element of stack\n", top_element);
+    printf("\n%d is the top element of stack\n\n", top_element);
+    traversal(stack);
     return 0;
 }
