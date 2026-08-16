@@ -7,37 +7,15 @@ struct ListNode {
 };
  
 struct ListNode* middleNode(struct ListNode* head) {
-    struct ListNode* ptr=head;
-    int* position = (int*)malloc(sizeof(int));
-    *position = 1;
+    struct ListNode* Ptr=head;
+    struct ListNode* FastPtr=head;
 
-    while(ptr->next!=NULL){
-        ptr=ptr->next;
-        (*position)+=1;
-    }
-
-    ptr=head;
-    if((*position)>100){
-        free(position);
-        free(ptr);
-        return NULL;
+    while(FastPtr!=NULL && FastPtr->next!=NULL){
+        Ptr=Ptr->next;
+        FastPtr=FastPtr->next->next;
     }
     
-    int* middle = (int*)malloc(sizeof(int));
-    *middle = (*position/2)+1;
-    
-    int *pointer = (int*)malloc(sizeof(int));
-    *pointer=1;
-    
-    while((*pointer)!=(*middle)){
-        ptr=ptr->next;
-        (*pointer)++;
-    }
-    
-    free(position);
-    free(middle);
-    free(pointer);
-    return ptr;
+    return Ptr;
 }
 
 /*Note: Remove main() and struct ListNode from code before Submission*/
