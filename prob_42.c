@@ -40,6 +40,7 @@ int trap(int* height, int heightSize) {
             pop(s);
             push(s,height[rear]);
             front++; rear++;
+            continue;
         }
 
         not_started=0;
