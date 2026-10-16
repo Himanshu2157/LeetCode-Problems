@@ -35,6 +35,4 @@ char* longestPalindrome(char* s) {
         }
         rear=strlen(s)-1; front++;
     }
-
-    return palindrome;
 }
